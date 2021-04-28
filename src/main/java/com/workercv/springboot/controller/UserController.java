@@ -12,7 +12,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String loginForm(@PathVariable("id") String id) {
-        System.out.println(UUID.randomUUID().toString().replace("-", "#").toLowerCase());
+        System.out.println(UUID.randomUUID().toString().replace("-", "").toLowerCase());
         return id;
     }
 
