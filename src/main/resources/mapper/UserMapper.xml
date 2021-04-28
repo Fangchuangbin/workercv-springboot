@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.workercv.springboot.mapper.UserMapper">
+<!--    <select id="queryPersonById" parameterType="int" resultType="org.ltx.entity.Person">-->
+<!--        select * from person where id = #{id}-->
+<!--    </select>-->
+    <select id="userLogin" resultType="com.workercv.springboot.entity.User">
+        SELECT * FROM workercv_user WHERE phone = #{phone} AND password = #{password}
+    </select>
+</mapper>

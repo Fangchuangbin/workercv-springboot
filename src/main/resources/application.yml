@@ -2,10 +2,10 @@ server:
   port: 8080
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/workercv?charactorEncoding=UTF-8&useSSL=false
+    url: jdbc:mysql://120.78.188.217:3306/workercv?charactorEncoding=UTF-8&useSSL=false
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: root
+    username: workercv
+    password: qiVhQcLct1hx
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.workercv.springboot.entity
