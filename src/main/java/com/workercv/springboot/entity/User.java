@@ -1,7 +1,6 @@
 package com.workercv.springboot.entity;
 
 import lombok.Data;
-
 import java.io.Serializable;
 
 @Data
@@ -16,6 +15,6 @@ public class User implements Serializable {
     private Integer sex;
     private String avatar;
     private String nativePlace;
-    private Integer registerTime;
+    private String registerTime;
 
 }

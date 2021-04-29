@@ -7,4 +7,8 @@
     <select id="userLogin" resultType="com.workercv.springboot.entity.User">
         SELECT * FROM workercv_user WHERE phone = #{phone} AND password = #{password}
     </select>
+
+    <insert id="userRegister" parameterType="com.workercv.springboot.dto.UserRegisterDTO">
+        INSERT INTO workercv_user (uuid, phone, email, password, realname, nickname, sex, avatar, native_place, register_time) VALUES (#{uuid}, #{phone}, #{email}, #{password}, #{realname}, #{nickname}, #{sex}, #{avatar}, #{nativePlace}, #{registerTime})
+    </insert>
 </mapper>

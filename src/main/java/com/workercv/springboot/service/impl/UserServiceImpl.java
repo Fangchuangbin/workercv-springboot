@@ -1,6 +1,7 @@
 package com.workercv.springboot.service.impl;
 
 import com.workercv.springboot.dto.UserLoginDTO;
+import com.workercv.springboot.dto.UserRegisterDTO;
 import com.workercv.springboot.entity.User;
 import com.workercv.springboot.mapper.UserMapper;
 import com.workercv.springboot.service.UserService;
@@ -18,6 +19,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> userLogin(UserLoginDTO userLoginDTO) {
         return userMapper.userLogin(userLoginDTO);
+    }
+
+    @Override
+    public int userRegister(UserRegisterDTO userRegisterDTO) {
+        return userMapper.userRegister((userRegisterDTO));
     }
 
 }
