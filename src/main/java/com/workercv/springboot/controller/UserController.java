@@ -12,14 +12,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.List;
 import java.util.UUID;
 
+@CrossOrigin
 @RestController
-public class UserController implements WebMvcConfigurer {
+public class UserController {
 
     @Autowired
     UserService userService;
 
     @PostMapping("/api/user/login")
-    @CrossOrigin("http://192.168.99.14:3000")
+
     public Object userLogin(@RequestBody UserLoginDTO userLoginDTO) {
         if(userLoginDTO.getPhone().equals("") || userLoginDTO.getPassword().equals("")) {
             return ResultUtil.error("请填写完整信息");
