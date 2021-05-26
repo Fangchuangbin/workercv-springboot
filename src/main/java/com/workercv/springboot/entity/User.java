@@ -1,5 +1,6 @@
 package com.workercv.springboot.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import java.io.Serializable;
 
@@ -14,7 +15,11 @@ public class User implements Serializable {
     private String nickname;
     private Integer sex;
     private String avatar;
+    @JsonProperty("native_place")
     private String nativePlace;
+    @JsonProperty("register_time")
     private String registerTime;
+    @JsonProperty("active_status")
+    private Integer activeStatus;
 
 }

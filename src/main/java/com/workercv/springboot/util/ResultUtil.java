@@ -1,55 +1,86 @@
 package com.workercv.springboot.util;
 
-import com.workercv.springboot.common.CodeEnum;
-import com.workercv.springboot.vo.ResultVO;
+import java.util.HashMap;
 
-public class ResultUtil {
+/**
+ * 状态码
+ * 0->success
+ * 1->error
+ * @param <T>
+ */
 
-    public static<T> ResultVO<T> success() {
-        return ResultData(CodeEnum.SUCCESS.getCode(), "success", null);
+public class ResultUtil<T> extends HashMap<String, Object> {
+
+    public static HashMap<Object, Object> success() {
+        HashMap<Object, Object> map = new HashMap<>();
+        map.put("code", 0);
+        map.put("msg", "success");
+        return map;
     }
 
-    public static<T> ResultVO<T> success(String msg) {
-        return ResultData(20000, msg, null);
+    public static HashMap<Object, Object> success(Integer code) {
+        HashMap<Object, Object> map = new HashMap<>();
+        map.put("code", code);
+        map.put("msg", "success");
+        return map;
     }
 
-    public static<T> ResultVO<T> success(T data) {
-        return ResultData(20000, "success", data);
+    public static HashMap<Object, Object> success(String msg) {
+        HashMap<Object, Object> map = new HashMap<>();
+        map.put("code", 0);
+        map.put("msg", msg);
+        return map;
     }
 
-    public static<T> ResultVO<T> success(String msg, T data) {
-        return ResultData(20000, msg, data);
+    public static HashMap<Object, Object> success(Integer code, String msg) {
+        HashMap<Object, Object> map = new HashMap<>();
+        map.put("code", code);
+        map.put("msg", msg);
+        return map;
     }
 
-    public static<T> ResultVO<T> success(Integer code, String msg, T data) {
-        return ResultData(code, msg, data);
+    public static<T> HashMap<Object, Object> success(String msg, T data) {
+        HashMap<Object, Object> map = new HashMap<>();
+        map.put("code", 0);
+        map.put("msg", msg);
+        map.put("data", data);
+        return map;
     }
 
-    public static<T> ResultVO<T> error() {
-        return ResultData(40000, "fail", null);
+    public static<T> HashMap<Object, Object> success(Integer code, String msg, T data) {
+        HashMap<Object, Object> map = new HashMap<>();
+        map.put("code", code);
+        map.put("msg", msg);
+        map.put("data", data);
+        return map;
     }
 
-    public static<T> ResultVO<T> error(String msg) {
-        return ResultData(40000, msg, null);
+    public static HashMap<Object, Object> error() {
+        HashMap<Object, Object> map = new HashMap<>();
+        map.put("code", 1);
+        map.put("msg", "error");
+        return map;
     }
 
-    public static<T> ResultVO<T> error(T data) {
-        return ResultData(40000, "fail", data);
+    public static HashMap<Object, Object> error(Integer code) {
+        HashMap<Object, Object> map = new HashMap<>();
+        map.put("code", code);
+        map.put("msg", "error");
+        return map;
     }
 
-    public static<T> ResultVO<T> error(String msg, T data) {
-        return ResultData(40000, msg, data);
+    public static HashMap<Object, Object> error(String msg) {
+        HashMap<Object, Object> map = new HashMap<>();
+        map.put("code", 1);
+        map.put("msg", msg);
+        return map;
     }
 
-    public static<T> ResultVO<T> error(Integer code, String msg, T data) {
-        return ResultData(code, msg, data);
+    public static HashMap<Object, Object> error(Integer code, String msg) {
+        HashMap<Object, Object> map = new HashMap<>();
+        map.put("code", code);
+        map.put("msg", msg);
+        return map;
     }
 
-    public static<T> ResultVO<T> ResultData(Integer code, String msg, T data) {
-        ResultVO<T> resultVO = new ResultVO<>();
-        resultVO.setCode(code);
-        resultVO.setMsg(msg);
-        resultVO.setData(data);
-        return resultVO;
-    }
 }

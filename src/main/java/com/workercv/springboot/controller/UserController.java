@@ -1,14 +1,17 @@
 package com.workercv.springboot.controller;
 
-import com.workercv.springboot.dto.UserLoginDTO;
-import com.workercv.springboot.dto.UserRegisterDTO;
+import com.auth0.jwt.exceptions.SignatureVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.sun.org.glassfish.gmbal.ParameterNames;
 import com.workercv.springboot.entity.User;
 import com.workercv.springboot.service.UserService;
+import com.workercv.springboot.util.JWTUtil;
 import com.workercv.springboot.util.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,34 +23,65 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/api/user/login")
-
-    public Object userLogin(@RequestBody UserLoginDTO userLoginDTO) {
-        if(userLoginDTO.getPhone().equals("") || userLoginDTO.getPassword().equals("")) {
+    public Object userLogin(@RequestBody User user) {
+        if(user.getPhone().equals("") || user.getPassword().equals("")) {
             return ResultUtil.error("请填写完整信息");
         }else{
-            userLoginDTO.setPassword(DigestUtils.md5DigestAsHex(userLoginDTO.getPassword().getBytes()));
-            List<User> userLogin = userService.userLogin(userLoginDTO);
-            if(userLogin.size() != 0){
-                return ResultUtil.success(userLogin.get(0));
+            user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+            List<User> userLogin = userService.userLogin(user);
+            HashMap<String, String> loginMap = new HashMap<>();
+            loginMap.put("phone", userLogin.get(0).getPhone());
+            loginMap.put("realname", userLogin.get(0).getRealname());
+            String token = JWTUtil.generateToken(loginMap);
+            System.out.println(token);
+            if(userLogin.isEmpty()) {
+                return ResultUtil.error("用户不存在");
+            }else if(user.getPassword().equals(userLogin.get(0).getPassword())){
+                HashMap<Object, Object> resultMap = new HashMap<>();
+                resultMap.put("token", token);
+                resultMap.put("info", userLogin.get(0));
+                return ResultUtil.success("登录成功", resultMap);
             }else{
                 return ResultUtil.error("账号或密码错误");
             }
         }
     }
 
-    @PostMapping("/api/user/register")
-    public Object userRegister(@RequestBody UserRegisterDTO userRegisterDTO) {
-        if(userRegisterDTO.getPhone().equals("") || userRegisterDTO.getEmail().equals("") || userRegisterDTO.getPassword().equals("") || userRegisterDTO.getRealname().equals("") || userRegisterDTO.getNickname().equals("") || userRegisterDTO.getSex().toString().equals("") || userRegisterDTO.getAvatar().equals("") ) {
-            return ResultUtil.error("请填写完整信息");
+    @GetMapping("/test")
+    public boolean test(String token) {
+        System.out.println(token);
+        try {
+            JWTUtil.verify(token);
+            return true;
+        }catch(TokenExpiredException e) { // 过期
+            return false;
+        }catch (Exception e){ // 异常
+            e.printStackTrace();
+            return false;
         }
-        userRegisterDTO.setPassword(DigestUtils.md5DigestAsHex(userRegisterDTO.getPassword().getBytes()));
-        userRegisterDTO.setUuid(UUID.randomUUID().toString().replace("-", "").toLowerCase());
-        userRegisterDTO.setRegisterTime(String.valueOf(System.currentTimeMillis()));
-        int userRegister = userService.userRegister(userRegisterDTO);
-        if(userRegister == 1) {
-            return ResultUtil.success("注册用户成功");
+    }
+
+    @PostMapping("/api/user/register")
+    public Object userRegister(@RequestBody User user) {
+        if(user.getPhone().equals("") || user.getEmail().equals("") || user.getPassword().equals("") || user.getRealname().equals("")) {
+            return ResultUtil.error("请填写完整信息");
         }else{
-            return ResultUtil.error();
+            List<User> userLogin = userService.userLogin(user);
+            if(userLogin.isEmpty()) {
+                user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+                user.setUuid(UUID.randomUUID().toString().replace("-", "").toLowerCase());
+                user.setRegisterTime(String.valueOf(System.currentTimeMillis()));
+                user.setActiveStatus(0);
+                int userRegister = userService.userRegister(user);
+                if(userRegister == 1) {
+                    return ResultUtil.success("注册成功");
+                }else{
+                    return ResultUtil.error("注册失败");
+                }
+            }else{
+                return ResultUtil.error(2,"用户已存在");
+            }
+
         }
     }
 
