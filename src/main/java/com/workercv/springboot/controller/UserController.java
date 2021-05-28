@@ -7,6 +7,7 @@ import com.workercv.springboot.entity.User;
 import com.workercv.springboot.service.UserService;
 import com.workercv.springboot.util.JWTUtil;
 import com.workercv.springboot.util.ResultUtil;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
@@ -32,13 +33,15 @@ public class UserController {
             HashMap<String, String> loginMap = new HashMap<>();
             loginMap.put("phone", userLogin.get(0).getPhone());
             loginMap.put("realname", userLogin.get(0).getRealname());
-            String token = JWTUtil.generateToken(loginMap);
-            System.out.println(token);
+            Base64 encoder = new Base64();
+            byte[] token = JWTUtil.generateToken(loginMap).getBytes();
+            String resultToken = encoder.encodeToString(token);
+            System.out.println(resultToken);
             if(userLogin.isEmpty()) {
                 return ResultUtil.error("用户不存在");
             }else if(user.getPassword().equals(userLogin.get(0).getPassword())){
                 HashMap<Object, Object> resultMap = new HashMap<>();
-                resultMap.put("token", token);
+                resultMap.put("token", resultToken);
                 resultMap.put("info", userLogin.get(0));
                 return ResultUtil.success("登录成功", resultMap);
             }else{
@@ -48,17 +51,8 @@ public class UserController {
     }
 
     @GetMapping("/test")
-    public boolean test(String token) {
-        System.out.println(token);
-        try {
-            JWTUtil.verify(token);
-            return true;
-        }catch(TokenExpiredException e) { // 过期
-            return false;
-        }catch (Exception e){ // 异常
-            e.printStackTrace();
-            return false;
-        }
+    public void test() {
+        System.out.println("test");
     }
 
     @PostMapping("/api/user/register")

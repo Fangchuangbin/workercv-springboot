@@ -12,7 +12,6 @@ public class User implements Serializable {
     private String email;
     private String password;
     private String realname;
-    private String nickname;
     private Integer sex;
     private String avatar;
     @JsonProperty("native_place")

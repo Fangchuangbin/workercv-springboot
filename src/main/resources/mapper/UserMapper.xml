@@ -9,6 +9,6 @@
     </select>
 
     <insert id="userRegister" parameterType="com.workercv.springboot.entity.User">
-        INSERT INTO workercv_user (uuid, phone, email, password, realname, nickname, sex, avatar, native_place, register_time) VALUES (#{uuid}, #{phone}, #{email}, #{password}, #{realname}, #{nickname}, #{sex}, #{avatar}, #{nativePlace}, #{registerTime})
+        INSERT INTO workercv_user (uuid, phone, email, password, realname, sex, avatar, native_place, register_time) VALUES (#{uuid}, #{phone}, #{email}, #{password}, #{realname}, #{nickname}, #{sex}, #{avatar}, #{nativePlace}, #{registerTime})
     </insert>
 </mapper>
